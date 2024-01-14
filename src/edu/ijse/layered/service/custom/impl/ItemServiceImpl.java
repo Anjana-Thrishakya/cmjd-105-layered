@@ -17,7 +17,7 @@ import java.util.List;
  * @author anjanathrishakya
  */
 public class ItemServiceImpl implements ItemService {
-    
+
     private ItemDao itemDao = (ItemDao) DaoFactory.getInstance().getDao(DaoFactory.DaoType.ITEM);
 
     @Override
@@ -25,33 +25,45 @@ public class ItemServiceImpl implements ItemService {
         ItemEntity entity = new ItemEntity(dto.getCode(),
                 dto.getDescription(), dto.getPack(), dto.getUnitPrice(),
                 dto.getQoh());
-        if(itemDao.save(entity)){
+        if (itemDao.save(entity)) {
             return "Successfully Saved";
-        } else{
+        } else {
             return "Failed";
         }
     }
 
     @Override
-    public String updateItem(ItemDto itemDto) throws Exception {
-        return null;
+    public String updateItem(ItemDto dto) throws Exception {
+        ItemEntity entity = new ItemEntity(dto.getCode(),
+                dto.getDescription(), dto.getPack(), dto.getUnitPrice(),
+                dto.getQoh());
+        if (itemDao.update(entity)) {
+            return "Successfully Updated";
+        } else {
+            return "Failed";
+        }
     }
 
     @Override
     public String deleteItem(String id) throws Exception {
-        return null;
+        if (itemDao.delete(id)) {
+            return "Successfully Deleted";
+        } else {
+            return "Failed";
+        }
     }
 
     @Override
     public ItemDto getItem(String id) throws Exception {
-        return null;
+        ItemEntity e = itemDao.get(id);
+        return new ItemDto(e.getItemCode(), e.getDescription(), e.getPackSize(), e.getUnitPrice(), e.getQoh());
     }
 
     @Override
     public List<ItemDto> getAll() throws Exception {
         List<ItemDto> itemDtos = new ArrayList<>();
         List<ItemEntity> itemEntities = itemDao.getAll();
-        
+
         for (ItemEntity e : itemEntities) {
             itemDtos.add(new ItemDto(e.getItemCode(), e.getDescription(), e.getPackSize(), e.getUnitPrice(), e.getQoh()));
         }

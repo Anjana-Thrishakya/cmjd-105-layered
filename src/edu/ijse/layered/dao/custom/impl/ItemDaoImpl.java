@@ -19,7 +19,7 @@ public class ItemDaoImpl implements ItemDao {
 
     @Override
     public boolean save(ItemEntity t) throws Exception {
-        return CrudUtil.executeUpdate("INSERT INTO Item VALUES(?,?,?,?,?)", 
+        return CrudUtil.executeUpdate("INSERT INTO Item VALUES(?,?,?,?,?)",
                 t.getItemCode(),
                 t.getDescription(),
                 t.getPackSize(),
@@ -29,16 +29,30 @@ public class ItemDaoImpl implements ItemDao {
 
     @Override
     public boolean update(ItemEntity t) throws Exception {
-        return false;
+        return CrudUtil.executeUpdate("UPDATE Item SET Description=?, PackSize=?, UnitPrice=?, QtyOnHand=? WHERE ItemCode=?",
+                t.getDescription(),
+                t.getPackSize(),
+                t.getUnitPrice(),
+                t.getQoh(),
+                t.getItemCode());
     }
 
     @Override
     public boolean delete(String id) throws Exception {
-        return false;
+        return CrudUtil.executeUpdate("DELETE FROM Item WHERE ItemCode=?",
+                id);
     }
 
     @Override
     public ItemEntity get(String id) throws Exception {
+        ResultSet rst = CrudUtil.executeQuery("SELECT * FROM Item WHERE ItemCode=?", id);
+        while (rst.next()) {
+            return new ItemEntity(rst.getString("ItemCode"),
+                    rst.getString("Description"),
+                    rst.getString("PackSize"),
+                    rst.getDouble("UnitPrice"),
+                    rst.getInt("QtyOnHand"));
+        }
         return null;
     }
 
@@ -46,11 +60,11 @@ public class ItemDaoImpl implements ItemDao {
     public List<ItemEntity> getAll() throws Exception {
         ResultSet rst = CrudUtil.executeQuery("SELECT * FROM Item");
         List<ItemEntity> itemEntities = new ArrayList<>();
-        
-        while (rst.next()) {            
-            itemEntities.add(new ItemEntity(rst.getString("ItemCode"), 
-                    rst.getString("Description"), 
-                    rst.getString("PackSize"), 
+
+        while (rst.next()) {
+            itemEntities.add(new ItemEntity(rst.getString("ItemCode"),
+                    rst.getString("Description"),
+                    rst.getString("PackSize"),
                     rst.getDouble("UnitPrice"),
                     rst.getInt("QtyOnHand")));
         }
