@@ -4,6 +4,7 @@
  */
 package edu.ijse.layered.dao.custom.impl;
 
+import edu.ijse.layered.dao.CrudUtil;
 import edu.ijse.layered.dao.custom.ItemDao;
 import edu.ijse.layered.entity.ItemEntity;
 import java.util.List;
@@ -16,7 +17,12 @@ public class ItemDaoImpl implements ItemDao {
 
     @Override
     public boolean save(ItemEntity t) throws Exception {
-        return false;
+        return CrudUtil.executeUpdate("INSERT INTO Item VALUES(?,?,?,?,?)", 
+                t.getItemCode(),
+                t.getDescription(),
+                t.getPackSize(),
+                t.getUnitPrice(),
+                t.getQoh());
     }
 
     @Override
