@@ -4,16 +4,25 @@
  */
 package edu.ijse.layered.view;
 
+import edu.ijse.layered.controller.ItemController;
+import edu.ijse.layered.dto.ItemDto;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author anjanathrishakya
  */
 public class ItemView extends javax.swing.JFrame {
+    
+    private ItemController itemController;
 
     /**
      * Creates new form ItemView
      */
     public ItemView() {
+        itemController = new ItemController();
         initComponents();
     }
 
@@ -104,6 +113,11 @@ public class ItemView extends javax.swing.JFrame {
 
         btnAdd.setFont(new java.awt.Font("Helvetica Neue", 0, 18)); // NOI18N
         btnAdd.setText("Save");
+        btnAdd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddActionPerformed(evt);
+            }
+        });
 
         btnUpdate.setFont(new java.awt.Font("Helvetica Neue", 0, 18)); // NOI18N
         btnUpdate.setText("Update");
@@ -221,6 +235,10 @@ public class ItemView extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
+        saveItem();
+    }//GEN-LAST:event_btnAddActionPerformed
+
     /**
      * @param args the command line arguments
 //     */
@@ -277,4 +295,19 @@ public class ItemView extends javax.swing.JFrame {
     private javax.swing.JTextField txtQoh;
     private javax.swing.JTextField txtUnitPrice;
     // End of variables declaration//GEN-END:variables
+    private void saveItem(){
+        try {
+            ItemDto dto = new ItemDto(txtItemCode.getText(),
+                    txtDesc.getText(),
+                    txtPack.getText(),
+                    Double.parseDouble(txtUnitPrice.getText()),
+                    Integer.parseInt(txtQoh.getText()));
+            
+            String resp = itemController.saveItem(dto);
+            JOptionPane.showMessageDialog(this, resp);
+        } catch (Exception ex) {
+            Logger.getLogger(ItemView.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(this, ex.getMessage());
+        }
+    }
 }
