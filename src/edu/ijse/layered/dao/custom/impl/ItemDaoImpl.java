@@ -8,6 +8,8 @@ import edu.ijse.layered.dao.CrudUtil;
 import edu.ijse.layered.dao.custom.ItemDao;
 import edu.ijse.layered.entity.ItemEntity;
 import java.util.List;
+import java.sql.ResultSet;
+import java.util.ArrayList;
 
 /**
  *
@@ -42,7 +44,17 @@ public class ItemDaoImpl implements ItemDao {
 
     @Override
     public List<ItemEntity> getAll() throws Exception {
-        return null;
+        ResultSet rst = CrudUtil.executeQuery("SELECT * FROM Item");
+        List<ItemEntity> itemEntities = new ArrayList<>();
+        
+        while (rst.next()) {            
+            itemEntities.add(new ItemEntity(rst.getString("ItemCode"), 
+                    rst.getString("Description"), 
+                    rst.getString("PackSize"), 
+                    rst.getDouble("UnitPrice"),
+                    rst.getInt("QtyOnHand")));
+        }
+        return itemEntities;
     }
 
 }

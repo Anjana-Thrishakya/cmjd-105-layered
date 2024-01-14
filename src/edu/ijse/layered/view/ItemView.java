@@ -6,16 +6,18 @@ package edu.ijse.layered.view;
 
 import edu.ijse.layered.controller.ItemController;
 import edu.ijse.layered.dto.ItemDto;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
  * @author anjanathrishakya
  */
 public class ItemView extends javax.swing.JFrame {
-    
+
     private ItemController itemController;
 
     /**
@@ -24,6 +26,7 @@ public class ItemView extends javax.swing.JFrame {
     public ItemView() {
         itemController = new ItemController();
         initComponents();
+        loadItem();
     }
 
     /**
@@ -53,7 +56,7 @@ public class ItemView extends javax.swing.JFrame {
         btnUpdate = new javax.swing.JButton();
         btnDelete = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tblItem = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -183,7 +186,7 @@ public class ItemView extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tblItem.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -194,7 +197,7 @@ public class ItemView extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(tblItem);
 
         javax.swing.GroupLayout bodyPanelLayout = new javax.swing.GroupLayout(bodyPanel);
         bodyPanel.setLayout(bodyPanelLayout);
@@ -240,8 +243,8 @@ public class ItemView extends javax.swing.JFrame {
     }//GEN-LAST:event_btnAddActionPerformed
 
     /**
-     * @param args the command line arguments
-//     */
+     * @param args the command line arguments //
+     */
 //    public static void main(String args[]) {
 //        /* Set the Nimbus look and feel */
 //        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -283,28 +286,52 @@ public class ItemView extends javax.swing.JFrame {
     private javax.swing.JPanel headerPanel;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
     private javax.swing.JLabel lblItemCode;
     private javax.swing.JLabel lblItemCode1;
     private javax.swing.JLabel lblItemCode2;
     private javax.swing.JLabel lblItemCode3;
     private javax.swing.JLabel lblItemCode4;
+    private javax.swing.JTable tblItem;
     private javax.swing.JTextField txtDesc;
     private javax.swing.JTextField txtItemCode;
     private javax.swing.JTextField txtPack;
     private javax.swing.JTextField txtQoh;
     private javax.swing.JTextField txtUnitPrice;
     // End of variables declaration//GEN-END:variables
-    private void saveItem(){
+    private void saveItem() {
         try {
             ItemDto dto = new ItemDto(txtItemCode.getText(),
                     txtDesc.getText(),
                     txtPack.getText(),
                     Double.parseDouble(txtUnitPrice.getText()),
                     Integer.parseInt(txtQoh.getText()));
-            
+
             String resp = itemController.saveItem(dto);
             JOptionPane.showMessageDialog(this, resp);
+        } catch (Exception ex) {
+            Logger.getLogger(ItemView.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(this, ex.getMessage());
+        }
+    }
+
+    private void loadItem() {
+        String[] columns = {"Item Code", "Description", "Pack Size", "Unit Price", "QOH"};
+        DefaultTableModel dtm = new DefaultTableModel(columns, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+
+        };
+
+        tblItem.setModel(dtm);
+
+        try {
+            List<ItemDto> itemList = itemController.getAll();
+            for (ItemDto itemDto : itemList) {
+                Object[] rowData = {itemDto.getCode(), itemDto.getDescription(), itemDto.getPack(), itemDto.getUnitPrice(), itemDto.getQoh()};
+                dtm.addRow(rowData);
+            }
         } catch (Exception ex) {
             Logger.getLogger(ItemView.class.getName()).log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(this, ex.getMessage());

@@ -9,6 +9,7 @@ import edu.ijse.layered.dao.custom.ItemDao;
 import edu.ijse.layered.dto.ItemDto;
 import edu.ijse.layered.entity.ItemEntity;
 import edu.ijse.layered.service.custom.ItemService;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -48,7 +49,13 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public List<ItemDto> getAll() throws Exception {
-        return null;
+        List<ItemDto> itemDtos = new ArrayList<>();
+        List<ItemEntity> itemEntities = itemDao.getAll();
+        
+        for (ItemEntity e : itemEntities) {
+            itemDtos.add(new ItemDto(e.getItemCode(), e.getDescription(), e.getPackSize(), e.getUnitPrice(), e.getQoh()));
+        }
+        return itemDtos;
     }
 
 }

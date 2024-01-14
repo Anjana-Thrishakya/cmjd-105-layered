@@ -7,6 +7,7 @@ package edu.ijse.layered.controller;
 import edu.ijse.layered.dto.ItemDto;
 import edu.ijse.layered.service.ServiceFactory;
 import edu.ijse.layered.service.custom.ItemService;
+import java.util.List;
 
 /**
  *
@@ -18,5 +19,9 @@ public class ItemController {
     
     public String saveItem(ItemDto itemDto) throws Exception{
         return itemService.saveItem(itemDto);
+    }
+    
+    public List<ItemDto> getAll() throws Exception{
+        return itemService.getAll();
     }
 }
