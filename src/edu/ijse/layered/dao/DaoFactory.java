@@ -4,6 +4,7 @@
  */
 package edu.ijse.layered.dao;
 
+import edu.ijse.layered.dao.custom.impl.CustomerDaoImpl;
 import edu.ijse.layered.dao.custom.impl.ItemDaoImpl;
 
 /**
@@ -27,6 +28,8 @@ public class DaoFactory {
         switch (type) {
             case ITEM:
                return new ItemDaoImpl();
+            case CUSTOMER:
+               return new CustomerDaoImpl();
             default:
                 return null;
         }
