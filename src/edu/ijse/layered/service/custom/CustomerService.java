@@ -5,13 +5,14 @@
 package edu.ijse.layered.service.custom;
 
 import edu.ijse.layered.dto.CustomerDto;
+import edu.ijse.layered.service.SuperService;
 import java.util.List;
 
 /**
  *
  * @author anjanathrishakya
  */
-public interface CustomerService {
+public interface CustomerService extends SuperService{
 
     String addCustomer(CustomerDto dto) throws Exception;
 
