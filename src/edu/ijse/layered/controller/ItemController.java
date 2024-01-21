@@ -21,6 +21,10 @@ public class ItemController {
         return itemService.saveItem(itemDto);
     }
     
+    public ItemDto get(String id) throws Exception{
+        return itemService.getItem(id);
+    }
+    
     public List<ItemDto> getAll() throws Exception{
         return itemService.getAll();
     }
