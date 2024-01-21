@@ -11,6 +11,7 @@ import edu.ijse.layered.dto.ItemDto;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -28,6 +29,7 @@ public class OrderView extends javax.swing.JFrame {
         customerController = new CustomerController();
         itemController = new ItemController();
         initComponents();
+        loadTable();
     }
 
     /**
@@ -323,6 +325,18 @@ public class OrderView extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, ex.getMessage());
             Logger.getLogger(OrderView.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    
+    private void loadTable() {
+        String[] columns = {"Item Code", "Qty", "Discount"};
+        DefaultTableModel dtm = new DefaultTableModel(columns, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+
+        };
+        tblItem.setModel(dtm);
     }
     
     private void addToTable(){
