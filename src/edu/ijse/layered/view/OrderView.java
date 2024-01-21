@@ -8,6 +8,9 @@ import edu.ijse.layered.controller.CustomerController;
 import edu.ijse.layered.controller.ItemController;
 import edu.ijse.layered.dto.CustomerDto;
 import edu.ijse.layered.dto.ItemDto;
+import edu.ijse.layered.dto.OrderDetailDto;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -18,9 +21,11 @@ import javax.swing.table.DefaultTableModel;
  * @author anjanathrishakya
  */
 public class OrderView extends javax.swing.JFrame {
-    
+
     private CustomerController customerController;
     private ItemController itemController;
+
+    private List<OrderDetailDto> orderDetailDtos = new ArrayList<>();
 
     /**
      * Creates new form OrderForm
@@ -292,12 +297,11 @@ public class OrderView extends javax.swing.JFrame {
     private javax.swing.JTextField txtQty;
     // End of variables declaration//GEN-END:variables
 
+    private void placeOrder() {
 
-    private void placeOrder(){
-        
     }
-    
-    private void searchItem(){
+
+    private void searchItem() {
         String itemId = txtItemId.getText();
         try {
             ItemDto itemDto = itemController.get(itemId);
@@ -311,11 +315,11 @@ public class OrderView extends javax.swing.JFrame {
             Logger.getLogger(OrderView.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
-    private void searchCustomer(){
+
+    private void searchCustomer() {
         String custId = txtCustId.getText();
         try {
-            CustomerDto customerDto= customerController.getCustomer(custId);
+            CustomerDto customerDto = customerController.getCustomer(custId);
             if (customerDto != null) {
                 lblCustData.setText(customerDto.getTitle() + " " + customerDto.getName());
             } else {
@@ -326,7 +330,7 @@ public class OrderView extends javax.swing.JFrame {
             Logger.getLogger(OrderView.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     private void loadTable() {
         String[] columns = {"Item Code", "Qty", "Discount"};
         DefaultTableModel dtm = new DefaultTableModel(columns, 0) {
@@ -338,8 +342,26 @@ public class OrderView extends javax.swing.JFrame {
         };
         tblItem.setModel(dtm);
     }
-    
-    private void addToTable(){
-        
+
+    private void addToTable() {
+        OrderDetailDto dto = new OrderDetailDto(txtItemId.getText(),
+                Integer.parseInt(txtQty.getText()),
+                Integer.parseInt(txtDiscount.getText())
+        );
+
+        orderDetailDtos.add(dto);
+
+        Object[] rowData = {dto.getItemId(), dto.getQty(), dto.getDiscount()};
+
+        DefaultTableModel dtm = (DefaultTableModel) tblItem.getModel();
+        dtm.addRow(rowData);
+        clearItemData();
+    }
+
+    private void clearItemData() {
+        txtItemId.setText("");
+        txtQty.setText("");
+        txtDiscount.setText("");
+        lblItemData.setText("");
     }
 }
