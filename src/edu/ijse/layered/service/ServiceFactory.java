@@ -6,6 +6,7 @@ package edu.ijse.layered.service;
 
 import edu.ijse.layered.service.custom.impl.CustomerServiceImpl;
 import edu.ijse.layered.service.custom.impl.ItemServiceImpl;
+import edu.ijse.layered.service.custom.impl.OrderServiceImpl;
 
 /**
  *
@@ -30,6 +31,8 @@ public class ServiceFactory {
                 return new ItemServiceImpl();
             case CUSTOMER:
                 return new CustomerServiceImpl();
+            case ORDER:
+                return new OrderServiceImpl();
             default:
                 return null;
         }
