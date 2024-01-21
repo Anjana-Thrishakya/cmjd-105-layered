@@ -4,6 +4,7 @@
  */
 package edu.ijse.layered.dao.custom.impl;
 
+import edu.ijse.layered.dao.CrudUtil;
 import edu.ijse.layered.dao.custom.OrderDao;
 import edu.ijse.layered.entity.OrderEntity;
 import java.util.List;
@@ -16,7 +17,10 @@ public class OrderDaoImpl implements OrderDao {
 
     @Override
     public boolean save(OrderEntity t) throws Exception {
-        return false;
+        return CrudUtil.executeUpdate("INSERT INTO Orders VALUES(?,?,?)", 
+                t.getId(),
+                t.getDate(),
+                t.getCustId());
     }
 
     @Override
